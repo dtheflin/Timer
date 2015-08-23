@@ -1,13 +1,10 @@
 ﻿<!DOCTYPE html>
-<html ng-app="exampleApp">
+<html >
 <head >
     <title>Timer</title>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
     <link href="includes/3rdparty/ionic/css/ionic.min.css" rel="stylesheet" />
-    <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
     <style>
         .timer {
             background-color:black;
@@ -19,68 +16,49 @@
             color:lightgray;
             text-align:center;
         }
+        .setTimePopup {
+            line-height: 20px;
+            width: auto;
+        }
+        .popup-container input[type="checkbox"] {
+            width: auto;
+        }
     </style>
-    <script>
-        angular.module('exampleApp', [])
-        .controller('timerCtrl', function ($scope, $document) {
-            $scope.time = new Date(1985, 01, 01, 00, 00, 00, 00);
-            $scope.timer = null;
-            $scope.delayedtime = new Date(1985, 01, 01, 00, 00, 10, 00);
-            $scope.delayedtimer = null;
-
-            $scope.startTimer = function () {
-                $document.find('#body').addClass("dan2"); //css('background-color', 'red');
-                $scope.running = true;
-                $scope.timer = setInterval(updateTimer, 1000);
-            };
-
-            $scope.running = false;
-            $scope.countDown = false;
-
-            $scope.stopTimer = function () {
-                $scope.running = false;
-                clearInterval($scope.timer);
-            };
-
-            $scope.resetTimer = function () {
-                $scope.time = new Date(1985, 01, 01, 01, 00, 00, 00);
-                //$scope.$apply();
-            };
-
-            function updateTimer(time) {
-                if (!$scope.countDown)
-                    $scope.time.setSeconds($scope.time.getSeconds() + 1);
-                else
-                    $scope.time.setSeconds($scope.time.getSeconds() - 1);
-                $scope.$apply();
-            };
-        })
-        .run(['$document', function ($document) {
-            //var x = angular.element('#text').contents(); //css('color','yellow');
-            //$document.find('#body').attr('style', 'background-color:gary'); //addClass("dan"); //css('background-color', 'red');
-            //$document.find('#body').css('width', '100px'); //addClass("dan"); //css('background-color', 'red');
-            //$('#text').css('color', 'red');
-            //x;
-            //$document.find('#timer').addClass('timer');
-            //$document.find('#delayedtimer').addClass('delayedtimer');
-        }])
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="includes/3rdparty/ionic/js/ionic.bundle.js"></script>
+    <script src="includes/script/app.js"></script>
+    <script src="includes/script/controllers/timerCtrl.js"></script>
 </head>
-<body ng-controller="timerCtrl" id="body" style="padding:0;line-height:100px" >
+<body ng-controller="timerCtrl as timer" id="body" style="padding:0;" >
 
         <ion-view title="Timer">
-            <ion-content padding="false" class="has-header has-footer">
-                <div id="timer" class="row responsive-lg" style="padding:0" >
-                    <div class="col timer" style="text-align:center;font-size:60pt;">
-                        {{time | date:'mm:ss'}}
+            <ion-content padding="false" class="has-header has-footer" style="line-height:100px">
+                <div id="timer" class="row responsive-lg" style="padding:0" ng-dblclick="timer.showSetTime();" >
+                    <div class="col timer" style="text-align:center;font-size:60pt;">                        
+                        {{timer.time | date:'mm:ss'}}
                     </div>
                 </div>
                     <div class="button-bar bar-footer ">
-                        <button class="button button-stable button-positive   icon ion-power" ng-click="startTimer()" ng-disabled="running"> Start</button>
-                        <button class="button button-stable button-assertive  icon ion-close-circled" ng-click="stopTimer()" ng-disabled="!running"> Stop</button>
-                        <button class="button button-stable button-energized  icon ion-refresh" ng-click="resetTimer()"> Reset</button>
+                        <button class="button button-stable button-positive   icon ion-power" ng-click="timer.startTimer()" ng-disabled="timer.running"> Start</button>
+                        <button class="button button-stable button-assertive  icon ion-close-circled" ng-click="timer.stopTimer()" ng-disabled="!timer.running"> Stop</button>
+                        <button class="button button-stable button-energized  icon ion-refresh" ng-click="timer.resetTimer()"> Reset</button>
                     </div>
             </ion-content>
         </ion-view>
+    <script>
+    window.ionic.Platform.ready(function () {
+        angular.bootstrap(document, ['timerApp']);
+    });
+    </script>
+    <script id="my-modal.html" type="text/ng-template">
+        <ion-modal-view>
+            <ion-header-bar>
+                <h1 class="title">My Modal title</h1>
+            </ion-header-bar>
+            <ion-content>
+                Hello!
+            </ion-content>
+        </ion-modal-view>
+    </script>
 </body>
 </html>
